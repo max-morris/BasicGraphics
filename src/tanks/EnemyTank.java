@@ -4,6 +4,7 @@ import basicgraphics.Clock;
 import basicgraphics.SpriteCollisionEvent;
 import basicgraphics.SpriteComponent;
 import basicgraphics.Task;
+import basicgraphics.sounds.ReusableClip;
 
 import java.awt.*;
 
@@ -62,9 +63,15 @@ public abstract class EnemyTank extends Tank {
         }
     }
 
-    void fireBullet(int v, double d) {
+    void fireBullet(int v, double d, ReusableClip sound) {
+        if (sound != null) {
+            sound.playOverlapping();
+        }
         new Bullet(getSpriteComponent(), this, d, v, false);
-        //TanksGame.shot.play(); // broken -- everything plays one at a time
+    }
+
+    void fireBullet(int v, double d) {
+        fireBullet(v, d, TanksGame.sSounds[0]);
     }
 
     @Override

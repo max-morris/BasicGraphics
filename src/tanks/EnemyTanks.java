@@ -120,7 +120,7 @@ public class EnemyTanks {
             }
 
             if (stopWatch > 5000) {
-                fireBullet(15, getAimingDirection());
+                fireBullet(15, getAimingDirection(), sSounds[1]);
                 resetStopwatch();
             }
         }
@@ -443,11 +443,12 @@ public class EnemyTanks {
                     } else if (shotsLeft > 0 && shotTimer > 2300) {
                         --shotsLeft;
                         shotTimer = 0;
-                        fireBullet(3, getAimingDirection());
-                        fireBullet(3, getAimingDirection() - 0.05 - r.nextDouble(0.03));
-                        fireBullet(3, getAimingDirection() - 0.1 - r.nextDouble(0.03));
-                        fireBullet(3, getAimingDirection() + 0.05 + r.nextDouble(0.03));
-                        fireBullet(3, getAimingDirection() + 0.1 + r.nextDouble(0.03));
+                        sSounds[2].playOverlapping();
+                        fireBullet(3, getAimingDirection(), null);
+                        fireBullet(3, getAimingDirection() - 0.05 - r.nextDouble(0.03), null);
+                        fireBullet(3, getAimingDirection() - 0.1 - r.nextDouble(0.03), null);
+                        fireBullet(3, getAimingDirection() + 0.05 + r.nextDouble(0.03), null);
+                        fireBullet(3, getAimingDirection() + 0.1 + r.nextDouble(0.03), null);
                     }
                     break;
                 case TURNING:
@@ -504,8 +505,9 @@ public class EnemyTanks {
                     } else if (shotsLeft > 0 && shotTimer > 1500) {
                         --shotsLeft;
                         shotTimer = 0;
+                        sSounds[2].playOverlapping();
                         for (int i = 0; i < 20; i++) {
-                            fireBullet(2, getAimingDirection() + r.nextDouble() - 0.5);
+                            fireBullet(2, getAimingDirection() + r.nextDouble() - 0.5, null);
                         }
                     }
                     break;

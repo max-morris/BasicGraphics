@@ -31,6 +31,12 @@ public class TanksGame {
     public static final ReusableClip boom = new ReusableClip("tanks/boom.wav");
     public static final ReusableClip shot = new ReusableClip("tanks/shot.wav");
 
+    public static final ReusableClip[] sSounds = new ReusableClip[] {
+            new ReusableClip("tanks/s0.wav"), new ReusableClip("tanks/s1.wav"),
+            new ReusableClip("tanks/s2.wav"), new ReusableClip("tanks/s3.wav"),
+            new ReusableClip("tanks/s4.wav"), new ReusableClip("tanks/s6.wav")
+    };
+
     public void updateHeaders() {
         headers[1].setText("Score: " + player.getScore());
         headers[2].setText("Ammo: " + player.getAmmo());
@@ -125,7 +131,7 @@ public class TanksGame {
             public void mousePressed(MouseEvent e) {
                 if (player.decrAmmo()) {
                     new Bullet(sc, player, player.getAimingDirection(), 3., true);
-                    shot.play();
+                    shot.playOverlapping();
                 }
             }
         });
