@@ -3,15 +3,18 @@ package lightsout;
 import basicgraphics.BasicFrame;
 import basicgraphics.Clock;
 import basicgraphics.SpriteComponent;
+import basicgraphics.Task;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 /**
  * @author Max Morris
  */
-public class LightsOutGame {
+class LightsOutGame {
     public static final int TILE_SIZE = 75;
     public static final int N_TILES = 3;
     public static final int PROBLEM_STEPS = 10;
@@ -37,6 +40,49 @@ public class LightsOutGame {
         }
 
         generateProblem();
+
+        frame.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                final int keycode = e.getKeyCode();
+
+                if (keycode == KeyEvent.VK_S || keycode == KeyEvent.VK_H) {
+                    Solver.solveAsync(tiles).thenAccept(moves -> {
+                        if (moves.isEmpty()) {
+                            JOptionPane.showMessageDialog(sc, "Couldn't find a solution fast enough.");
+                            return;
+                        }
+
+                        if (keycode == KeyEvent.VK_S) {
+                            Clock.addTask(new Task() {
+                                @Override
+                                public void run() {
+                                    if (moves.isEmpty()) {
+                                        this.setFinished();
+                                        return;
+                                    }
+
+                                    tiles[moves.peek() / N_TILES][moves.peek() % N_TILES].setHint(iteration() % 400 < 200);
+
+                                    if (iteration() % 800 == 0 && iteration() > 0){
+                                        int move = moves.pop();
+                                        tiles[move / N_TILES][move % N_TILES].toggleWithNeighbors(true);
+                                    }
+                                }
+                            });
+                        } else {
+                            Clock.addTask(new Task(1000) {
+                                @Override
+                                public void run() {
+                                    assert !moves.isEmpty();
+                                    tiles[moves.peek() / N_TILES][moves.peek() % N_TILES].setHint(iteration() % 400 < 200);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
 
         frame.show();
         Clock.start(1);

@@ -14,7 +14,7 @@ import static lightsout.LightsOutGame.TILE_SIZE;
 /**
  * @author Max Morris
  */
-public class Tile extends Sprite {
+class Tile extends Sprite {
     public boolean lit;
     public final int x, y;
     private final LightsOutGame gameInstance;
@@ -26,7 +26,7 @@ public class Tile extends Sprite {
         this.x = x;
         this.y = y;
 
-        setPicture(makeTile(lit));
+        setPicture(makeTile(lit ? TileState.Lit : TileState.Off));
         setX(x * TILE_SIZE);
         setY(y * TILE_SIZE);
     }
@@ -34,7 +34,11 @@ public class Tile extends Sprite {
     public void toggle() {
         lit = !lit;
         gameInstance.litTiles += lit ? 1 : -1;
-        setPicture(makeTile(lit));
+        setPicture(makeTile(lit ? TileState.Lit : TileState.Off));
+    }
+
+    public void setHint(boolean hint) {
+        setPicture(makeTile(hint ? TileState.Hint : lit ? TileState.Lit : TileState.Off));
     }
 
     public void toggleWithNeighbors(boolean checkWin) {
@@ -59,15 +63,27 @@ public class Tile extends Sprite {
         toggleWithNeighbors(true);
     }
 
-    private static Picture makeTile(boolean lit) {
+    private static Picture makeTile(TileState state) {
         Image im = BasicFrame.createImage(TILE_SIZE, TILE_SIZE);
         Graphics g = im.getGraphics();
 
         g.setColor(Color.RED);
         g.fillRect(0, 0, TILE_SIZE, TILE_SIZE);
 
-        g.setColor(lit ? Color.WHITE : Color.BLACK);
+        g.setColor(state.color);
+
         g.fillRect(1, 1, TILE_SIZE - 2, TILE_SIZE - 2);
         return new Picture(im);
+    }
+
+    private enum TileState {
+        Off(Color.BLACK),
+        Lit(Color.WHITE),
+        Hint(Color.BLUE);
+
+        final Color color;
+        TileState(Color color) {
+            this.color = color;
+        }
     }
 }
