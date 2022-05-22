@@ -19,9 +19,9 @@ class Solver {
 
     static {
         if (N_TILES == 4) {
-            MAX_DEPTH = 8;
-            GOOD_ENOUGH = 6;
-            MAX_STEPS = 50_000_000;
+            MAX_DEPTH = PROBLEM_STEPS;
+            GOOD_ENOUGH = 5;
+            MAX_STEPS = 75_000_000;
         } else if (N_TILES == 5) {
             MAX_DEPTH = PROBLEM_STEPS;
             GOOD_ENOUGH = 12;
@@ -32,7 +32,7 @@ class Solver {
             MAX_STEPS = -1;
         } else {
             MAX_DEPTH = 8;
-            GOOD_ENOUGH = 6;
+            GOOD_ENOUGH = 4;
             MAX_STEPS = 50_000_000;
         }
     }
